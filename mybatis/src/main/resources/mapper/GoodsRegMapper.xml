@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ksmart.mybatis.mapper.MemberMapper">
+	
+	<resultMap type="Member" id="memberResultMap">
+		<id 	column="g_code" property="goodsCode"/>
+		<result column="g_name" property="goodsName"/>
+		<result column="g_title" property="goodsTitle"/>
+		<result column="g_details" property="goodsDetails"/>
+		<result column="g_check" property="goodsCheck"/>
+	
+	</resultMap>
+	<select id = "g_code" parameterType = "Goods">
+	SELECT
+	stc.tb_s_service_top_category,
+	stc.tb_s_service_sub_category
+	FROM
+	tb_s_service_top_category AS stc
+	INNERJOIN
+	tb_s_service_sub_category AS ssc
+	ON
+	stc.service_top_category_code = ssc.service_top_category_code;
+	</select>
+	
+	
+	<update id="g_code" parameterType="Goods">
+		UPDATE tb_s_service_top_category 
+		<trim prefix="SET" prefixOverrides=",">
+			<if test="g_title != null and goodsTitle != ''">
+			  ,g_title = #{goodsTitle}
+			</if>
+			<if test="g_details != null and goodsDetails != ''">
+			  ,g_details = #{goodsDetails}
+			</if>
+			<if test="g_checked != null and goodsChecked != ''">
+			  ,g_checked = #{goodsChecked}
+			</if>
+		</trim>
+		WHERE
+		   g_code = #{goodsCode};
+	</update>
+	
+	
+	<insert id ="g_code" parameterType = "Goods">
+	insert into (
+		g_code, g_title, g_details, g_checked)
+		values
+		("g_001", "웹 제작 해드립니다", "자바/spring사용해서 30일이내에 완성시켜 드립니다", "y"),
+		("g_002", "앱 제작 해드립니다", "자바/spring사용해서 30일이내에 완성시켜 드립니다", "y"),
+		("g_003", "1 제작 해드립니다", "자바/spring사용해서 30일이내에 완성시켜 드립니다", "y"),
+		("g_004", "2 제작 해드립니다", "자바/spring사용해서 30일이내에 완성시켜 드립니다", "n"),
+		("g_005", "3 제작 해드립니다", "자바/spring사용해서 30일이내에 완성시켜 드립니다", "n");
+		
+	
+	</insert>
+</mapper> 
