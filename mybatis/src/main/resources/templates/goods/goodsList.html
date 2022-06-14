@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layout/default}">
+
+	<!-- 사용자정의 contents -->
+	<th:block layout:fragment="customContents">
+		<table border="1">
+			<thead>
+				<tr>
+					<th>상품코드</th>
+					<th>상품이름</th>
+					<th>상품가격</th>
+					<th>판매자 아이디</th>
+					<th>상품등록날짜</th>
+					<th>수정</th>
+					<th>삭제</th>
+				</tr>
+			</thead>
+			
+			<tbody>
+				<tr th:if="${not #lists.isEmpty(goodsList)}" th:each="l : ${goodsList}">
+					<td th:text="${l.goodsCode}"></td>
+					<td th:text="${l.goodsName}"></td>
+					<td th:text="${l.goodsPrice}"></td>
+					<td th:text="${l.goodsSellerId}"></td>
+					<td th:text="${l.goodsRegDate}"></td>
+					<td>
+						<!-- th:if 해당 조건이 true면 작동한다 -->
+						<!-- 1,2 관리자, 판매자 3:구매자 -->
+						<a th:if="${session.SLEVEL != '3'}" th:href="@{/goods/modifyGoods(goodsCode=${l.goodsCode})}">수정</a>
+						<!-- th:unless 해당 조건이 false이면 작동한다 -->
+						<a th:unless="${session.SLEVEL != '3'}" href="#" onclick="alert('구매자는 상품을 수정할 수 없습니다.')">수정</a>
+					</td>
+					<td>
+						<!-- 해당 조건이 true 이면 작동한다 -->
+						<a th:if="${session.SLEVEL != '3'}" th:href="@{/goods/removeGoods}">삭제</a>
+						<!-- 해당 조건이 false면 작동한다 -->
+						<a th:unless="${session.SLEVEL != '3'}" href="@{redirect:/goods/goodsList}" onclick="alert('구매자는 상품을 삭제할 수 없습니다.')">삭제</a>
+					</td>
+				</tr>
+				<tr th:unless="${not #lists.isEmpty(goodsList)}">
+					<td colspan="5">조회된 내용이 없습니다.</td>
+				</tr>
+			</tbody>
+			
+		</table>
+		<th:block>
+			<button type="submit" class="btn btn-md-primary">이전</button>
+			<button type="submit" class="btn btn-md-primary">다음</button>
+		</th:block>
+	</th:block>
+
+</html>

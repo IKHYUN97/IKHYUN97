@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ksmart.mybatis.mapper.GoodsMapper">
+	<resultMap type="GoodsReg" id="goodsResultMap">
+		<result	column="goods_basic_info_code"			property="goodsBasicInfoCode"/>
+		<result column="goods_sub_category_code"			property="goodsSubCategoryCode"/>
+		<result column="goods_name"		property="goodsName"/>
+		<result column="goods_description"	property="goodsDescription"/>
+		<result column="goods_basic_info_reg_date"		property="goodsBasicInfoRegDate"/>
+		<association property="GoodsImg">
+			<id		column="goods_image_code" 		property="goodsImageCode"/>
+			<result column="goods_image_reg" 		property="goodsImageReg"/>
+			<result column="goods_image_reg_date" 	property="goodsImageRegDate"/>
+		</association>
+	</resultMap>
+	
+	<!-- 상품기본정보 조회 -->
+	
+	<!-- Map 타입 -> 자료형 담을 때 쓰는것.  -->
+	<select id="goodsBasicInfo" parameterType="map" resultMap="goodsResultMap">
+	SELECT
+		gbi.goods_basic_info_code,
+		gbi.goods_sub_category_code,
+		gbi.goods_description,
+		gbi.goods_name,
+		gbi.user_id_code,
+		gbi.goods_basic_info_reg_date,
+		gi.goods_image_code,
+		gi.goods_image_reg,
+		gi.user_id_code,
+		gi.goods_image_reg_date
+	FROM
+		tb_g_goods_basic_info AS gbi
+		INNER JOIN
+		tb_g_goods_image AS gi
+	ON
+		gbi.user_id_code = gi.user_id_code;
+	</select>
+	
+
+</mapper>
